@@ -1,6 +1,7 @@
 const bodyParser = require('body-parser');
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors');
 const { MONGO_URI } = require('./config/keys.js');
 
 const routerProductType = require('./routes/ProductType.js');
@@ -11,7 +12,7 @@ const PORT = process.env.PORT || 5000;
 const app = express();
 
 app.use(bodyParser.json());
-
+app.use(cors());
 app.use('/product-type',routerProductType);
 app.use('/product', routerProduct)
 

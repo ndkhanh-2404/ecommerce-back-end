@@ -47,10 +47,10 @@ module.exports.getProduct  = async (req,res) => {
 };
 
 module.exports.postProduct = async (req,res) => {
-    const { name, image, price, description } = req.body;
+    const { ProductType, name, image, price, description } = req.body;
 
     try {
-        const product = await Product.findOne({ name, image, price, description});
+        const product = await Product.findOne({ ProductType, name, image, price, description});
 
         if(product){
             return res.status(402).json({
@@ -60,7 +60,7 @@ module.exports.postProduct = async (req,res) => {
         }
         
         const evaluation = Math.floor(Math.random()*6);
-        const newProduct = new Product({name, image, price, description, evaluation});
+        const newProduct = new Product({ ProductType, name, image, price, description, evaluation});
 
         await newProduct.save();
 
