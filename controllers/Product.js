@@ -122,8 +122,9 @@ module.exports.updateProduct = async (req,res) => {
         const products = await Product.find({});
 
         for( let product of products){
-            const evaluation = Math.floor(Math.random()*6);
-            await Product.findByIdAndUpdate(product._id,{evaluation},{new:true});
+            let price = product.price;
+            await Product.findByIdAndUpdate(product._id,{price},{new:true});
+            
         }
         return res.status(200).json({
             success: true, 
