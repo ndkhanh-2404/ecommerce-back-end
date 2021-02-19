@@ -20,6 +20,6 @@ mongoose.connect(MONGO_URI, {
     useCreateIndex: true,
     useNewUrlParser:true,
     useUnifiedTopology: true,
-    useFindAndModify: true
+    useFindAndModify: false
 }).then(() => app.listen(PORT, () => console.log(`Server run on port: ${PORT}`)))
 .catch((err) => console.log('Connect fail.'));

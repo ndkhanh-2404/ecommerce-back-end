@@ -55,7 +55,7 @@ module.exports.postProduct = async (req,res) => {
         if(product){
             return res.status(402).json({
                 success: false, 
-                message: 'Product Type already existed.'
+                message: 'Product already existed.'
             });
         }
         
@@ -74,4 +74,66 @@ module.exports.postProduct = async (req,res) => {
             message: error.message
         });
     }
+};
+
+module.exports.postFullProduct = async (req,res) => {
+    const { ProductType, products } = req.body;
+    try {
+        for( let product of products ) {
+            const oldProduct = await Product.findOne({ 
+                ProductType, 
+                name: product.name, 
+                image: product.image, 
+                price: product.price, 
+                description: product.description
+            });
+
+            if(oldProduct){
+                return res.status(402).json({
+                    success: false, 
+                    message: 'Product Type already existed.'
+                });
+            }
+            const evaluation = Math.floor(Math.random()*6);
+            const newProduct = new Product({ ProductType, 
+                name: product.name, 
+                image: product.image, 
+                price: product.price, 
+                description: product.description,
+                evaluation
+            });
+
+            await newProduct.save();
+        }
+        return res.status(201).json({
+            success: true, 
+            message: "Successfully."
+        });
+    } catch (error) {
+        return res.status(404).json({
+            success: false, 
+            message: error.message
+        });
+    }
+};
+
+module.exports.updateProduct = async (req,res) => {
+    try {
+        const products = await Product.find({});
+
+        for( let product of products){
+            const evaluation = Math.floor(Math.random()*6);
+            await Product.findByIdAndUpdate(product._id,{evaluation},{new:true});
+        }
+        return res.status(200).json({
+            success: true, 
+            message: "Successfully"
+        });
+    } catch (error) {
+        return res.status(404).json({
+            success: false, 
+            message: error.message
+        });
+    }
+    
 };
