@@ -12,7 +12,8 @@ module.exports.getFullProduct = async (req,res) => {
         }
         return res.status(201).json({
             success: true, 
-            Products: products
+            Products: products,
+            total: products.length
         });
     } catch (error) {
         return res.status(404).json({
@@ -22,7 +23,29 @@ module.exports.getFullProduct = async (req,res) => {
     }
     
 };
+module.exports.getProductByProductType = async (req,res) => {
+    const { pType } = req.query;
 
+    try {
+        const products = await Product.find({ ProductType: _id });
+
+        if(products.length === 0){
+            return res.status(401).json({
+                success: false, 
+                message: 'No Products.'
+            });
+        }
+        return res.status(201).json({
+            success: true, 
+            Products: products
+        });
+    } catch (error) {
+        return res.status(404).json({
+            success: false, 
+            message: error.message
+        });
+    }
+}
 module.exports.getProduct  = async (req,res) => {
     const { _id } = req.params;
 

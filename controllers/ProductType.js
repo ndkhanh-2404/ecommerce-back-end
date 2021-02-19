@@ -52,3 +52,35 @@ module.exports.postProductType = async (req,res) => {
     }
 };
 
+module.exports.postFullProductType = async (req,res) => {
+    const { productTypes } = req.body;
+
+    try {
+        for( let productType of productTypes){
+
+            const oldProductType = await ProductType.findOne({ 
+                name: productType.name, 
+                image: productType.image
+            });
+    
+            if(!oldProductType){
+                const newProductType = new ProductType({
+                    name: productType.name, 
+                    image: productType.image
+                });
+        
+                await newProductType.save();
+            }    
+        }
+
+        return res.status(201).json({
+            success: true, 
+            message: "Successfully"
+        });
+    } catch (error) {
+        return res.status(404).json({
+            success: false, 
+            message: error.message
+        });
+    }
+};
