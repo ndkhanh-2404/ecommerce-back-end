@@ -24,26 +24,8 @@ module.exports.getFullProduct = async (req,res) => {
     
 };
 module.exports.searchProduct = async (req,res) => {
-    const { pType, name, price } = req.query;
-    try {
-        const products = await Product.find({ ProductType: pType, name, price });
-
-        if(products.length === 0){
-            return res.status(401).json({
-                success: false, 
-                message: 'No Products.'
-            });
-        }
-        return res.status(201).json({
-            success: true, 
-            Products: products
-        });
-    } catch (error) {
-        return res.status(404).json({
-            success: false, 
-            message: error.message
-        });
-    }
+    const { ...product } = req.query;
+    return res.status(200).json({product});
 }
 module.exports.getProduct  = async (req,res) => {
     const { _id } = req.params;
