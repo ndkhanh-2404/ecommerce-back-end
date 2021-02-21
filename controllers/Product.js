@@ -25,7 +25,18 @@ module.exports.getFullProduct = async (req,res) => {
 };
 module.exports.searchProduct = async (req,res) => {
     const { ...product } = req.query;
-    return res.status(200).json({product});
+    try {
+        const products = await Product.find(product);
+        return res.status(201).json({
+            success: true, 
+            Products: products,
+        });
+    } catch (error) {
+        return res.status(404).json({
+            success: false, 
+            message: error.message
+        });
+    }
 }
 module.exports.getProduct  = async (req,res) => {
     const { _id } = req.params;
