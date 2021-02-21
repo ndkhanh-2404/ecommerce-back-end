@@ -23,11 +23,10 @@ module.exports.getFullProduct = async (req,res) => {
     }
     
 };
-module.exports.getProductByProductType = async (req,res) => {
-    const { pType } = req.query;
-
+module.exports.searchProduct = async (req,res) => {
+    const { pType, name, price } = req.query;
     try {
-        const products = await Product.find({ ProductType: _id });
+        const products = await Product.find({ ProductType: pType, name, price });
 
         if(products.length === 0){
             return res.status(401).json({
