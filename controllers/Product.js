@@ -24,12 +24,18 @@ module.exports.getFullProduct = async (req,res) => {
     
 };
 module.exports.searchProduct = async (req,res) => {
-    const { ...product } = req.query;
+    const { name } = req.query;
     try {
-        const products = await Product.find(product);
+        const products = await Product.find();
+        const _products = []
+        for(let product of products){
+            if(product.name.includes(name)){
+                _products.push(product);
+            }
+        }
         return res.status(201).json({
             success: true, 
-            Products: products,
+            Products: _products,
         });
     } catch (error) {
         return res.status(404).json({
