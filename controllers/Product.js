@@ -20,7 +20,7 @@ module.exports.getFullProduct = async (req,res) => {
         return res.status(201).json({
             success: true, 
             Products: _products,
-            total: _products.length
+            total: products.length
         });
     } catch (error) {
         return res.status(404).json({
