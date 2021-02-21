@@ -2,7 +2,7 @@ const Product = require('../models/Product.js');
 
 
 module.exports.getFullProduct = async (req,res) => {
-    let {page, limit, ...cond } = req.query;
+    let {page, limit, cond } = req.query;
     page = parseInt(page);
     limit = parseInt(limit);
     try {
