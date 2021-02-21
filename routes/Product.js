@@ -4,7 +4,7 @@ const { getFullProduct, getProduct,searchProduct, postProduct, postFullProduct, 
 
 
 router.get('/search/?',searchProduct)
-router.get('/', getFullProduct);
+router.get('/?', getFullProduct);
 router.get('/:_id', getProduct);
 
 router.post('/', postProduct);

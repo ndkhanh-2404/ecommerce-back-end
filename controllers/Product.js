@@ -2,18 +2,23 @@ const Product = require('../models/Product.js');
 
 
 module.exports.getFullProduct = async (req,res) => {
+    let {page, limit, ...cond } = req.query;
+    page = parseInt(page);
+    limit = parseInt(limit);
     try {
-        const products = await Product.find();
+        const products = await Product.find(cond);
         if(products.length === 0){
             return res.status(401).json({
                 success: false, 
                 message: 'No Products.'
             });
         }
+        console.log((page-1)*limit, page*limit-1);
+        const _products = products.length >= page*limit  ? products.slice((page-1)*limit, page*limit) : (products.length >= (page-1)*limit ? products.slice((page-1)*limit): products);
         return res.status(201).json({
             success: true, 
-            Products: products,
-            total: products.length
+            Products: _products,
+            total: _products.length
         });
     } catch (error) {
         return res.status(404).json({
