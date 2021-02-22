@@ -5,6 +5,7 @@ module.exports.getFullProduct = async (req,res) => {
     let {page, limit, cond } = req.query;
     cond = JSON.parse(cond);
     
+    console.log({page, limit, cond})
     page = parseInt(page);
     limit = parseInt(limit);
     try {
