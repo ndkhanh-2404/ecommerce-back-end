@@ -1,5 +1,5 @@
 const Product = require('../models/Product.js');
-
+const ProductType = require('../models/ProductType.js');
 
 module.exports.getFullProduct = async (req,res) => {
     let {page, limit, cond } = req.query;
@@ -10,14 +10,11 @@ module.exports.getFullProduct = async (req,res) => {
     limit = parseInt(limit);
     try {
         const products = await Product.find(cond);
-        if(products.length === 0){
-            return res.status(401).json({
-                success: false, 
-                message: 'No Products.'
-            });
-        }
         console.log((page-1)*limit, page*limit-1);
-        const _products = products.length >= page*limit  ? products.slice((page-1)*limit, page*limit) : (products.length >= (page-1)*limit ? products.slice((page-1)*limit): products);
+        let _products = products.length >= page*limit  ? products.slice((page-1)*limit, page*limit) : (products.length >= (page-1)*limit ? products.slice((page-1)*limit): products);
+        
+        
+
         return res.status(201).json({
             success: true, 
             Products: _products,
@@ -56,16 +53,24 @@ module.exports.getProduct  = async (req,res) => {
     const { _id } = req.params;
 
     try {
-        const product = await Product.findById(_id);
+        let product = await Product.findById(_id);
+        const productType = await ProductType.findById(product.ProductType);
         if(!product){
-            return res.status(401).json({
+            return res.status(400).json({
                 success: false, 
                 message: 'No Product.'
             });
         }
         return res.status(201).json({
             success: true, 
-            Product: product
+            Product: {
+                _id: product._id,
+                name: product.name,
+                image: product.image,
+                description: product.description,
+                evaluation: product.evaluation,
+                ProductType: productType
+            }
         });
     } catch (error) {
         return res.status(404).json({
@@ -82,7 +87,7 @@ module.exports.postProduct = async (req,res) => {
         const product = await Product.findOne({ ProductType, name, image, price, description});
 
         if(product){
-            return res.status(402).json({
+            return res.status(400).json({
                 success: false, 
                 message: 'Product already existed.'
             });
@@ -118,7 +123,7 @@ module.exports.postFullProduct = async (req,res) => {
             });
 
             if(oldProduct){
-                return res.status(402).json({
+                return res.status(400).json({
                     success: false, 
                     message: 'Product Type already existed.'
                 });
