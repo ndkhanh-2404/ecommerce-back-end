@@ -1,8 +1,14 @@
 const Product = require('../models/Product.js');
 const ProductType = require('../models/ProductType.js');
 
+function removeAccents(str) {
+    return str.normalize('NFD')
+              .replace(/[\u0300-\u036f]/g, '')
+              .replace(/đ/g, 'd').replace(/Đ/g, 'D');
+  }
+
 module.exports.getFullProduct = async (req,res) => {
-    let {page, limit, cond } = req.query;
+    let {page, limit, cond,search } = req.query;
     cond = JSON.parse(cond);
     
     console.log({page, limit, cond})
@@ -13,7 +19,9 @@ module.exports.getFullProduct = async (req,res) => {
         console.log((page-1)*limit, page*limit-1);
         let _products = products.length >= page*limit  ? products.slice((page-1)*limit, page*limit) : (products.length >= (page-1)*limit ? products.slice((page-1)*limit): products);
         
-        
+        if(search){
+            _products = _products.filter(_product => removeAccents(_product.name.toLowerCase()).includes(removeAccents(search.toLowerCase())));
+        }
 
         return res.status(201).json({
             success: true, 
