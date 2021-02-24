@@ -66,6 +66,7 @@ module.exports.getProduct  = async (req,res) => {
             Product: {
                 _id: product._id,
                 name: product.name,
+                price: product.price,
                 image: product.image,
                 description: product.description,
                 evaluation: product.evaluation,
