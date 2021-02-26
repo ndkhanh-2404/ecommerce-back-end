@@ -49,20 +49,7 @@ module.exports.signin = (req,res) => {
             if(user.authenticate(req.body.password)){
                 const token = jwt.sign({_id: user._id, role: user.role}, process.env.JWT_SECRET,{expiresIn: "1h"});
                 const {_id, firstName,lastName, username, email, role, phoneNumber } = user;
-                return res.status(200).json({
-                    token,
-                    user: {
-                        _id, 
-                        username,
-                        name:{
-                            firstName,
-                            lastName,
-                        },
-                        email,
-                        phoneNumber,
-                        role
-                    }
-                })
+                return res.status(200).json({ token })
             }else{
                 return res.status(400).json({success:false, message: "Invalid password."});
             }
@@ -71,3 +58,27 @@ module.exports.signin = (req,res) => {
         }
     });
 };
+
+module.exports.getProfile = async (req,res) =>{
+    const user = req.user;
+    User.findById(user._id)
+    .exec((error, _user) => {
+        if(error) return res.status(400).json({error});
+        if(!user) return res.status(400).json({message: "User doesn't exist." });
+        else{
+            return res.status(200).json({
+                user: {
+                    _id: _user._id, 
+                    username: _user.username,
+                    name:{
+                        firstName: _user.firstName,
+                        lastName: _user.lastName,
+                    },
+                    email: _user.email,
+                    phoneNumber: _user.phoneNumber,
+                    role: _user.role
+                }
+            });
+        }
+    })
+}
