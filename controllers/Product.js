@@ -15,14 +15,13 @@ module.exports.getFullProduct = async (req,res) => {
     page = parseInt(page);
     limit = parseInt(limit);
     try {
-        const products = await Product.find(cond);
-        console.log((page-1)*limit, page*limit-1);
-        let _products = products.length >= page*limit  ? products.slice((page-1)*limit, page*limit) : (products.length >= (page-1)*limit ? products.slice((page-1)*limit): products);
+        let products = await Product.find(cond);
+        
         
         if(search){
-            _products = _products.filter(_product => removeAccents(_product.name.toLowerCase()).includes(removeAccents(search.toLowerCase())));
+            products = products.filter(product => removeAccents(product.name.toLowerCase()).includes(removeAccents(search.toLowerCase())));
         }
-
+        let _products = products.length >= page*limit  ? products.slice((page-1)*limit, page*limit) : (products.length >= (page-1)*limit ? products.slice((page-1)*limit): products);
         return res.status(201).json({
             success: true, 
             Products: _products,

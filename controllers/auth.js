@@ -64,7 +64,7 @@ module.exports.getProfile = async (req,res) =>{
     User.findById(user._id)
     .exec((error, _user) => {
         if(error) return res.status(400).json({error});
-        if(!user) return res.status(400).json({message: "User doesn't exist." });
+        if(!user) return res.status(401).json({message: "User doesn't exist." });
         else{
             return res.status(200).json({
                 user: {
