@@ -81,3 +81,27 @@ module.exports.signin = (req,res) => {
         }
     });
 };
+
+module.exports.getProfile = async (req,res) =>{
+    const user = req.user;
+    User.findById(user._id)
+    .exec((error, _user) => {
+        if(error) return res.status(400).json({error});
+        if(!user) return res.status(401).json({message: "User doesn't exist." });
+        else{
+            return res.status(200).json({
+                user: {
+                    _id: _user._id, 
+                    username: _user.username,
+                    name:{
+                        firstName: _user.firstName,
+                        lastName: _user.lastName,
+                    },
+                    email: _user.email,
+                    phoneNumber: _user.phoneNumber,
+                    role: _user.role
+                }
+            });
+        }
+    })
+}
