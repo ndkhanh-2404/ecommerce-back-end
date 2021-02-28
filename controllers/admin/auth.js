@@ -58,7 +58,8 @@ module.exports.signin = (req,res) => {
                     const {_id,  firstName,lastName ,phoneNumber, username, email, role} = user;
                     return res.status(200).json({
                         token,
-                        user: {_id, 
+                        user: {
+                            _id, 
                             name: {
                                 firstName,
                                 lastName
