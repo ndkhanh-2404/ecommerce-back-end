@@ -33,7 +33,7 @@ module.exports.signup = (req,res,next) => {
             if(error){
                 return res.status(400).json({
                     success:false,
-                    message: 'Something went wrong.'
+                    error
                 });
             }
 
@@ -77,7 +77,7 @@ module.exports.signin = (req,res) => {
                 return res.status(400).json({success:false, message: "Invalid password."});
             }
         }else{
-            return res.status(400).json({success:false, message: 'Something went wrong.'});
+            return res.status(400).json({success:false, message: 'Email doesn\'t exist.});
         }
     });
 };
