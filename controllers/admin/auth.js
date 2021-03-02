@@ -77,7 +77,7 @@ module.exports.signin = (req,res) => {
                 return res.status(400).json({success:false, message: "Invalid password."});
             }
         }else{
-            return res.status(400).json({success:false, message: 'Email doesn\'t exist.});
+            return res.status(400).json({success:false, message: "Email doesn't exist."});
         }
     });
 };
